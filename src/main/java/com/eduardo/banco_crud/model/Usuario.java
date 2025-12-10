@@ -17,4 +17,5 @@ public abstract class Usuario {
     private String email;
     private String cpf;
     private String senha;
+
 }
