@@ -13,9 +13,9 @@ public abstract class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
-    private String email;
-    private String cpf;
-    private String senha;
+    protected String nome;
+    protected String email;
+    protected String cpf;
+    protected String senha;
 
 }

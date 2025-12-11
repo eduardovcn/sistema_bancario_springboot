@@ -3,7 +3,7 @@ package com.eduardo.banco_crud.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,18 +12,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class Cliente extends Usuario {
 
-    private BigDecimal saldo = BigDecimal.ZERO; // Saldo inicial zero
+    @OneToMany(mappedBy = "id_cliente", fetch = FetchType.LAZY)
+    private List<Conta> contas;
 
-    public void depositar(BigDecimal valor){
-        this.saldo = this.saldo.add(valor);
+
+
     }
 
-    public void sacar(BigDecimal valor){
-        if (saldo.compareTo(valor) >= 0) {
-            saldo = saldo.subtract(valor);
-        } else {
-            throw new IllegalArgumentException("Saldo insuficiente para saque.");
-        }
-    }
-
-}
