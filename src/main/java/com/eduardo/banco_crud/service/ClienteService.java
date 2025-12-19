@@ -4,7 +4,6 @@ import com.eduardo.banco_crud.repository.ContaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import com.eduardo.banco_crud.repository.ClienteRepository;
 import com.eduardo.banco_crud.model.Cliente;
@@ -68,6 +67,10 @@ public class ClienteService {
         } catch (DataIntegrityViolationException ex) {
             throw new IllegalStateException("Não foi possível deletar o cliente: Ainda existem contas associadas a ele.", ex);
         }
+    }
+    // Para teste de integração APENAS
+    public String ola(String nome) {
+        return "Olá, " + nome + "! Bem-vindo ao sistema bancário.";
     }
 
 
