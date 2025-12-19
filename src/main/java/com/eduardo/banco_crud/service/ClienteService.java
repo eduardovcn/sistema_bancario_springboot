@@ -1,6 +1,10 @@
 package com.eduardo.banco_crud.service;
 
+import com.eduardo.banco_crud.repository.ContaRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import com.eduardo.banco_crud.repository.ClienteRepository;
 import com.eduardo.banco_crud.model.Cliente;
@@ -10,13 +14,12 @@ import java.util.Objects;
 
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final ContaRepository contaRepository;
 
-    public ClienteService(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
-    }
 
     @Transactional
     public Cliente criarCliente(Cliente cliente) {
@@ -56,7 +59,15 @@ public class ClienteService {
         if (!clienteRepository.existsById(id)) {
             throw new IllegalArgumentException("Cliente não encontrado");
         }
-        clienteRepository.deleteById(id);
+        if (contaRepository.existsByClienteId(id)) {
+            throw new IllegalStateException("Não é possível deletar o cliente, pois ele possui contas associadas.");
+        }
+        try {
+            clienteRepository.deleteById(id);
+
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalStateException("Não foi possível deletar o cliente: Ainda existem contas associadas a ele.", ex);
+        }
     }
 
 

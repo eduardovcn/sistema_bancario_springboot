@@ -4,6 +4,7 @@ import com.eduardo.banco_crud.model.Cliente;
 import com.eduardo.banco_crud.model.Conta;
 import com.eduardo.banco_crud.repository.ContaRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,15 +12,11 @@ import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor // Cria o construtor com os campos finais automaticamente, usando o Lombok.
 public class ContaService {
 
     private final ContaRepository contaRepository;
     private final ClienteService clienteService;
-
-    public ContaService(ContaRepository contaRepository, ClienteService clienteService) {
-        this.contaRepository = contaRepository;
-        this.clienteService = clienteService;
-    }
 
     @Transactional
     public Conta criarConta(String cpfCliente) {
@@ -28,15 +25,13 @@ public class ContaService {
 
         Conta novaConta = new Conta();
         novaConta.setCliente(cliente);
+        // Garante que o saldo inicial seja zero, mesmo que o construtor, eventualmente, mude.
         novaConta.setSaldo(BigDecimal.ZERO);
-
         novaConta = contaRepository.save(novaConta);
 
         String numeroFormatado = String.format("%04d", novaConta.getId());
         novaConta.setNumeroConta(numeroFormatado);
 
-
-        // Passo 4: Persistir
         return contaRepository.save(novaConta);
     }
 
@@ -87,6 +82,17 @@ public class ContaService {
 
         contaRepository.save(contaDestino);
         return contaRepository.save(contaOrigem);
+    }
+
+    @Transactional
+    public void encerrarConta(String numeroConta) {
+        Conta conta = contaRepository.findByNumeroConta(numeroConta)
+                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+
+        if (conta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
+            throw new IllegalStateException("Conta não pode ser encerrada pois ainda há saldo disponível.");
+        }
+        contaRepository.delete(conta);
     }
 
 }

@@ -16,18 +16,14 @@ public class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "numero_conta", unique = true, nullable = false)
     private String numeroConta;
+
     private BigDecimal saldo = BigDecimal.ZERO;
 
-
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
-
-    public Conta(String numeroConta, Cliente cliente) {
-        this.numeroConta = numeroConta;
-        this.cliente = cliente;
-    }
 
     public void depositar(BigDecimal valor) {
         saldo = saldo.add(valor);

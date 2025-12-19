@@ -11,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente extends Usuario {
-
-    @OneToMany(mappedBy = "id_cliente", fetch = FetchType.LAZY)
+    // Referir o nome do atributo na classe Conta que mapeia o relacionamento, ou seja, "cliente".
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Conta> contas;
 
 
