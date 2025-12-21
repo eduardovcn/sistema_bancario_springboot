@@ -68,6 +68,7 @@ public class ClienteService {
             throw new IllegalStateException("Não foi possível deletar o cliente: Ainda existem contas associadas a ele.", ex);
         }
     }
+
     // Para teste de integração APENAS
     public String ola(String nome) {
         return "Olá, " + nome + "! Bem-vindo ao sistema bancário.";

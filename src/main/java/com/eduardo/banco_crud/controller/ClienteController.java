@@ -15,6 +15,7 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
+    // Para testar se o serviço está funcionando
     @GetMapping("/ola")
     public String ola(String nome) {
 
@@ -29,17 +30,32 @@ public class ClienteController {
         Cliente novoCliente = clienteService.criarCliente(cliente);
 
 
-
         return ResponseEntity.status(HttpStatus.CREATED) // Cria o status HTTP 201
                 .header("X-SISTEMA-BANCARIO", "O cliente foi criado com sucesso") // Cabeçalho personalizado(só para praticar funcionalidades)
                 .body(novoCliente); // Faz o objeto criado ser retornado no corpo da resposta.
     }
 
-    @PostMapping
-    public String deletarCliente() {
-        // Lógica para deletar um cliente pode ser adicionada aqui
-        return "Cliente deletado com sucesso!";
+    @DeleteMapping("/deletar_cliente/{id}") // {id} indica um valor dinâmico na URL.
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
+        // @PathVariable indica que o valor do id virá da URL.
+        clienteService.deletarCliente(id);
+
+        // Deve retornar 204 No Content quando a deleção for bem-sucedida.
+        return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/buscar_cliente/{id}")
+    public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
+        Cliente cliente = clienteService.buscarClientePorId(id);
+        return ResponseEntity.ok(cliente); // Retorna 200 OK com o cliente no corpo da resposta.
+    }
+
+    @GetMapping("/buscar_cliente/{cpf}")
+    public ResponseEntity<Cliente> buscarClientePorCpf(@PathVariable String cpf) {
+        Cliente cliente = clienteService.buscarClientePorCpf(cpf);
+        return ResponseEntity.ok(cliente); // Retorna 200 OK com o cliente no corpo da resposta.
+    }
+
 
     @GetMapping("/teste")
     public String teste() {
