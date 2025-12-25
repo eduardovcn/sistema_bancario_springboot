@@ -35,7 +35,7 @@ public class ClienteController {
                 .body(novoCliente); // Faz o objeto criado ser retornado no corpo da resposta.
     }
 
-    @DeleteMapping("/encerrar_cliente/{id}") // {id} indica um valor dinâmico na URL.
+    @DeleteMapping("/deletar_cliente/{id}") // {id} indica um valor dinâmico na URL.
     public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
         // @PathVariable indica que o valor do id virá da URL.
         clienteService.deletarCliente(id);
@@ -55,7 +55,6 @@ public class ClienteController {
         Cliente cliente = clienteService.buscarClientePorCpf(cpf);
         return ResponseEntity.ok(cliente); // Retorna 200 OK com o cliente no corpo da resposta.
     }
-
 
     @GetMapping("/teste")
     public String teste() {
