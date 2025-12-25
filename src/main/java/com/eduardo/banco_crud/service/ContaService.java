@@ -67,7 +67,7 @@ public class ContaService {
     }
 
 
-    public List<Conta> listarContasDoCliente(Long clienteId) {
+    public List<Conta> listarContas(Long clienteId) {
         return contaRepository.findByClienteId(clienteId);
     }
 
