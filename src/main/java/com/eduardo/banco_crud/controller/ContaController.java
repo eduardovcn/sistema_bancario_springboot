@@ -64,5 +64,12 @@ public class ContaController {
         return ResponseEntity.ok(saldo);
     }
 
+    @PostMapping("/transferir/{contaOrigemId}/{contaDestinoId}")
+    public ResponseEntity<Void> transferir(@PathVariable Long contaOrigemId, @PathVariable Long contaDestinoId, @RequestBody BigDecimal valor) {
+        //Da forma como está, o valor virá no corpo da requisição. Não colocar entre chaves. Exemplo de corpo: 500.00
+        contaService.transferir(contaOrigemId, contaDestinoId, valor);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

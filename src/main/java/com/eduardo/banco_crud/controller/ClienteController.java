@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/area_cliente")
@@ -54,6 +56,12 @@ public class ClienteController {
     public ResponseEntity<Cliente> buscarClientePorCpf(@PathVariable String cpf) {
         Cliente cliente = clienteService.buscarClientePorCpf(cpf);
         return ResponseEntity.ok(cliente); // Retorna 200 OK com o cliente no corpo da resposta.
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Cliente>> listarClientes() {
+        List<Cliente> clientes = clienteService.listarClientes();
+        return ResponseEntity.ok(clientes); // Retorna 200 OK com a lista de clientes no corpo da resposta.
     }
 
     @GetMapping("/teste")

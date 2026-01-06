@@ -9,6 +9,7 @@ import com.eduardo.banco_crud.repository.ClienteRepository;
 import com.eduardo.banco_crud.model.Cliente;
 
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -40,6 +41,7 @@ public class ClienteService {
         if (id == null) {
             throw new IllegalArgumentException("Id do cliente é obrigatório");
         }
+
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
     }
@@ -48,7 +50,12 @@ public class ClienteService {
     public Cliente buscarClientePorCpf(String cpf) {
         return clienteRepository.findByCpf(cpf).orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado com este CPF"));
     }
-
+    
+    @Transactional
+    public List<Cliente> listarClientes() {
+        
+        return clienteRepository.findAll();
+    }
 
     @Transactional
     public void deletarCliente(Long id) {
