@@ -1,5 +1,6 @@
 package com.eduardo.banco_crud.service;
 
+import com.eduardo.banco_crud.dto.ContaRequestDTO;
 import com.eduardo.banco_crud.repository.ContaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente buscarClientePorCpf(String cpf) {
+    public Cliente buscarClientePorCpf(ContaRequestDTO cpf) {
         return clienteRepository.findByCpf(cpf).orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado com este CPF"));
     }
     

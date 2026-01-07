@@ -1,11 +1,13 @@
 package com.eduardo.banco_crud.service;
 
+import com.eduardo.banco_crud.dto.ContaRequestDTO;
 import com.eduardo.banco_crud.model.Cliente;
 import com.eduardo.banco_crud.model.Conta;
 import com.eduardo.banco_crud.repository.ContaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.eduardo.banco_crud.dto.ContaResponseDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +21,8 @@ public class ContaService {
     private final ClienteService clienteService;
 
     @Transactional
-    public Conta criarConta(String cpfCliente) {
+    public ContaResponseDTO criarConta(ContaRequestDTO cpfCliente) {
+
 
         Cliente cliente = clienteService.buscarClientePorCpf(cpfCliente);
 
@@ -31,8 +34,10 @@ public class ContaService {
 
         String numeroFormatado = String.format("%04d", novaConta.getId());
         novaConta.setNumeroConta(numeroFormatado);
+        contaRepository.save(novaConta);
 
-        return contaRepository.save(novaConta);
+        return new ContaResponseDTO(novaConta);
+
     }
 
 
@@ -66,9 +71,14 @@ public class ContaService {
         return "Extrato da conta " + conta.getNumeroConta() + ": Saldo atual = " + conta.getSaldo();
     }
 
+    @Transactional
+    public List<ContaResponseDTO> listarContas(Long clienteId) {
 
-    public List<Conta> listarContas(Long clienteId) {
-        return contaRepository.findByClienteId(clienteId);
+        List<Conta> contas = contaRepository.findByClienteId(clienteId);
+
+        return contas.stream()//Fluxo de dados
+                .map(ContaResponseDTO::new) //loop para converter cada Conta em ContaResponseDTO
+                .toList(); //Transforma o fluxo de volta em uma lista
     }
 
     @Transactional
