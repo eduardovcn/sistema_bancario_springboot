@@ -1,5 +1,6 @@
 package com.eduardo.banco_crud.repository;
 
+import com.eduardo.banco_crud.model.Cliente;
 import com.eduardo.banco_crud.model.Conta;
 
 
@@ -15,4 +16,5 @@ public interface ContaRepository extends JpaRepository<Conta, Long> {
     Optional<Conta> findByNumeroConta(String numeroConta);
 
     boolean existsByClienteId(Long clienteId);
+
 }

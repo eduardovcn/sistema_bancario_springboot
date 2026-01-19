@@ -23,8 +23,13 @@ public class ContaService {
     @Transactional
     public ContaResponseDTO criarConta(ContaRequestDTO cpfCliente) {
 
+        String cpf = cpfCliente == null || cpfCliente.cpfCliente() == null ? null : cpfCliente.cpfCliente().trim();
 
-        Cliente cliente = clienteService.buscarClientePorCpf(cpfCliente);
+        if (cpf == null || cpf.isEmpty()){
+            throw new IllegalArgumentException("CPF do cliente é obrigatório para criar uma conta.");
+        }
+
+        Cliente cliente = clienteService.buscarClientePorCpf(cpf).orElseThrow(() -> new RuntimeException("Cliente com CPF: " + cpf + " não encontrado."));
 
         Conta novaConta = new Conta();
         novaConta.setCliente(cliente);
