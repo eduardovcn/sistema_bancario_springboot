@@ -6,14 +6,12 @@ import com.eduardo.banco_crud.repository.ContaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.eduardo.banco_crud.repository.ClienteRepository;
 import com.eduardo.banco_crud.model.Cliente;
 
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 
@@ -41,13 +39,12 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente buscarClientePorId(Long id) {
+    public Optional <Cliente> buscarClientePorId(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Id do cliente é obrigatório");
         }
 
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+        return clienteRepository.findById(id);
     }
 
     @Transactional
@@ -56,7 +53,10 @@ public class ClienteService {
             throw new IllegalArgumentException("CPF inválido");
         }
 
-        return clienteRepository.findByCpf(cpf.trim());
+        Optional<Cliente> clienteBuscado = clienteRepository.findByCpf(cpf.trim());
+
+        return clienteBuscado;
+
     }
     
     @Transactional

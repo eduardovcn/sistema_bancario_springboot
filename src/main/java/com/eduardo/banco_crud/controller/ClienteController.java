@@ -1,6 +1,5 @@
 package com.eduardo.banco_crud.controller;
 
-
 import com.eduardo.banco_crud.dto.ClienteRequestDTO;
 import com.eduardo.banco_crud.dto.ClienteResponseDTO;
 import com.eduardo.banco_crud.model.Cliente;
@@ -43,24 +42,24 @@ public class ClienteController {
     }
 
     @GetMapping("/buscar_por_id/{id}")
-    public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
-        Cliente cliente = clienteService.buscarClientePorId(id);
+    public ResponseEntity<Optional<Cliente>> buscarClientePorId(@PathVariable Long id) {
+        Optional<Cliente> cliente = clienteService.buscarClientePorId(id);
         return ResponseEntity.ok(cliente); // Retorna 200 OK com o cliente no corpo da resposta.
     }
 
-    @GetMapping("/buscar_por_cpf")
-    public ResponseEntity<ClienteResponseDTO> buscarClientePorCpf(@RequestBody ClienteRequestDTO cpfBusca) {
+    @GetMapping("/buscar_por_cpf/{cpfBusca}")
+    public ResponseEntity<ClienteResponseDTO> buscarClientePorCpf(@PathVariable String cpfBusca) {
 
-        // 1. Chama o serviço passando o CPF que veio dentro do DTO
-        Optional<Cliente> clienteOpt = clienteService.buscarClientePorCpf(cpfBusca.cpf());
+        // Vai chamar o serviço passando o CPF que veio dentro do DTO
+        Optional<Cliente> clienteOpt = clienteService.buscarClientePorCpf(cpfBusca);
 
-        // 2. Se o cliente existir, converte para DTO de resposta e devolve 200
+        // Se o cliente existir, converte para DTO de resposta e devolve 200
         if (clienteOpt.isPresent()) {
             Cliente cliente = clienteOpt.get();
             return ResponseEntity.ok(new ClienteResponseDTO(cliente));
         }
 
-        // 3. Se não achar, devolve 404
+        // Se não achar, 404
         return ResponseEntity.notFound().build();
     }
 
